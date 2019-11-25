@@ -1,6 +1,7 @@
 package org.fasttrackit.onlineshop;
 
 import org.fasttrackit.onlineshop.domain.Product;
+import org.fasttrackit.onlineshop.exception.ResourceNotFoundException;
 import org.fasttrackit.onlineshop.service.ProductService;
 import org.fasttrackit.onlineshop.transfer.SaveProductRequest;
 import org.junit.Test;
@@ -22,21 +23,27 @@ public class PorductServiceIntegrationTests {
 
     @Test
     public void testCreatepProduct_whenValidRestest_thenProductIsSaved() {
-        SaveProductRequest request = new SaveProductRequest();
-        request.setName("Banana" + System.currentTimeMillis());
-        request.setQuantity(100);
-        request.setDescription("Healthy food");
-        Product createdProduct = productService.createProduct(request);
-        assertThat(createdProduct, notNullValue());
-        assertThat(createdProduct.getId(), notNullValue());
-        assertThat(createdProduct.getId(), greaterThan(0L));
-        assertThat(createdProduct.getName(), is(request.getName()));
-        assertThat(createdProduct.getPrice(), is(request.getPrice()));
-        assertThat(createdProduct.getDescription(), is(request.getDescription()));
+		createProduct();
 
-    }
+	}
 
-    @Test(expected = TransactionSystemException.class)
+	private Product createProduct() {
+		SaveProductRequest request = new SaveProductRequest();
+		request.setName("Banana" + System.currentTimeMillis());
+		request.setQuantity(100);
+		request.setDescription("Healthy food");
+		Product createdProduct = productService.createProduct(request);
+		assertThat(createdProduct, notNullValue());
+		assertThat(createdProduct.getId(), notNullValue());
+		assertThat(createdProduct.getId(), greaterThan(0L));
+		assertThat(createdProduct.getName(), is(request.getName()));
+		assertThat(createdProduct.getPrice(), is(request.getPrice()));
+		assertThat(createdProduct.getDescription(), is(request.getDescription()));
+
+		return createdProduct;
+	}
+
+	@Test(expected = TransactionSystemException.class)
     void testCreatePorduct_whenInvalidRequest_thenThrowException() {
         SaveProductRequest request = new SaveProductRequest();
 
@@ -45,4 +52,22 @@ public class PorductServiceIntegrationTests {
         productService.createProduct(request);
 
     }
+
+    @Test
+	public void testGetProduct_whenExistingProduct_thenReturnProduct () {
+    	Product createdProduct = createProduct();
+
+		Product product = productService.getProduct(createdProduct.getId());
+
+		assertThat(product, notNullValue());
+		assertThat(product.getId(), is (createdProduct.getId()));
+		assertThat(product.getName(), is(createdProduct.getName()));
+		assertThat(product.getPrice(), is(createdProduct.getPrice()));
+		assertThat(product.getDescription(), is(createdProduct.getDescription()));
+	}
+
+	@Test (expected = ResourceNotFoundException.class)
+	public void testGetProduct_whenNonExistingProduct_thenThrowResourceNotFoundException(){
+    	productService.getProduct(99999999L);
+	}
 }
