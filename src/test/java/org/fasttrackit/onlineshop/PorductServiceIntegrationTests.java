@@ -82,5 +82,18 @@ public class PorductServiceIntegrationTests {
         request.setQuantity(createdProduct.getQuantity() + 10);
 
         Product updatedProduct = productService.updateProduct(createdProduct.getId(), request);
+
+        assertThat(updatedProduct, notNullValue());
+        assertThat(updatedProduct.getName(), is(request.getName()));
+        assertThat(updatedProduct.getId(), is(createdProduct.getId()));
+        assertThat(updatedProduct.getPrice(), is(request.getPrice()));
+        assertThat(updatedProduct.getQuantity(), is(request.getQuantity()));
+        assertThat(updatedProduct.getDescription(), is(request.getDescription()));
+    }
+    @Test (expected = ResourceNotFoundException.class)
+    public void  testDeleteProduct_whenExistingProduct_thenProductIsDeleted () {
+        Product product = createProduct();
+        productService.deleteProduct(product.getId());
+        productService.getProduct(product.getId());
     }
 }
