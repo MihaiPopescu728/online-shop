@@ -13,10 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 @CrossOrigin
 
 @RestController
-@RequestMapping ("/products")
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
