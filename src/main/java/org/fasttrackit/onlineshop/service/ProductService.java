@@ -39,7 +39,7 @@ public class ProductService {
         //product.setName(request.getName());
         //product.setPrice(request.getPrice());
         //product.setQuantity(request.getQuantity());
-        p//roduct.setImageUrl(request.getImageUrl());
+        //roduct.setImageUrl(request.getImageUrl());
 
         return productRepository.save(product);
     }
