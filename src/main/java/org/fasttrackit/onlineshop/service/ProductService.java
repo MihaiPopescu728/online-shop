@@ -40,12 +40,12 @@ public class ProductService {
     public Product createProduct(SaveProductRequest request) {
         LOGGER.info("Creating product {} ", request);
         Product product = objectMapper.convertValue(request, Product.class);
-        //Product product = new Product();
-        ///roduct.setDescription(request.getDescription());
-        //product.setName(request.getName());
-        //product.setPrice(request.getPrice());
-        //product.setQuantity(request.getQuantity());
-        //roduct.setImageUrl(request.getImageUrl());
+//        Product product = new Product();
+//        product.setDescription(request.getDescription());
+//        product.setName(request.getName());
+//        product.setPrice(request.getPrice());
+//        product.setQuantity(request.getQuantity());
+//        product.setImageUrl(request.getImageUrl());
 
         return productRepository.save(product);
     }
